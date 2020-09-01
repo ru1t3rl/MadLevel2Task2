@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         initViews()
     }
 
-    private fun initViews(){
+    private fun initViews() {
         binding.rvQuestions.layoutManager = LinearLayoutManager(
             this@MainActivity,
             RecyclerView.VERTICAL,
@@ -44,21 +44,28 @@ class MainActivity : AppCompatActivity() {
         loadQuestions()
     }
 
-    private fun loadQuestions(){
-        for(i in resources.getStringArray(R.array.questions)){
-            addQuestion(i)
+    private fun loadQuestions() {
+        for ((i, question) in resources.getStringArray(R.array.questions).withIndex()) {
+            when(i) {
+                0 -> addQuestion(question, resources.getBoolean(R.bool.q1))
+                1 -> addQuestion(question, resources.getBoolean(R.bool.q2))
+                2 -> addQuestion(question, resources.getBoolean(R.bool.q3))
+                3 -> addQuestion(question, resources.getBoolean(R.bool.q4))
+                else -> print("Error, could not load the answer and question")
+            }
         }
     }
 
-    private fun addQuestion(question: String){
-        if(question.isNotBlank()){
-            questions.add(Question(question, false))
+    private fun addQuestion(question: String, answer: Boolean) {
+        if (question.isNotBlank()) {
+            questions.add(Question(question, answer))
             questionAdapter.notifyDataSetChanged()
         }
     }
 
-    private fun createItemTouchHelper() : ItemTouchHelper {
-        var callback = object :ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+    private fun createItemTouchHelper(): ItemTouchHelper {
+        var callback = object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -71,16 +78,17 @@ class MainActivity : AppCompatActivity() {
              * Directions:
              * Right - 8 - true
              * Left - 4 - false
-              */
+             */
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 
-                if((!questions[position].answer && direction == 4) || (questions[position].answer && direction == 8)) {
+                if ((!questions[position].answer && direction == 4) || (questions[position].answer && direction == 8)) {
                     questions.removeAt(position)
                     questionAdapter.notifyDataSetChanged()
                 } else {
 
-                    Snackbar.make(tvQuestion, "Wrong answer! Try again...", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(tvQuestion, "Wrong answer! Try again...", Snackbar.LENGTH_SHORT)
+                        .show()
                     questionAdapter.notifyDataSetChanged()
                 }
             }

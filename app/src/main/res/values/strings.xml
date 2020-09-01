@@ -8,4 +8,8 @@
         <item>A Unit in Kotlin corresponds to a void in Java.</item>
         <item>In kotlin \'when\' replaces the \'switch\' operator in Java</item>
     </string-array>
+    <bool name="q1">false</bool>
+    <bool name="q2">false</bool>
+    <bool name="q3">true</bool>
+    <bool name="q4">true</bool>
 </resources>
